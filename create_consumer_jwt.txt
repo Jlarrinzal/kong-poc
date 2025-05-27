@@ -1,0 +1,28 @@
+0. Instalar el plugin 
+
+1. Activar el plugin jwt en el servicio actividades
+
+curl -i -X POST http://localhost:8001/services/actividades-service/plugins \
+  --data name=jwt
+
+2. Crear un consumidor en Kong (genérico)
+
+curl -i -X POST http://localhost:8001/consumers \
+  --data username=cliente-demo
+
+3. Crear credenciales JWT para ese consumidor
+
+curl -i -X POST http://localhost:8001/consumers/cliente-demo/jwt
+
+Te devolverá algo así:
+
+{
+  "id": "...",
+  "key": "abc123",
+  "secret": "supersecreto",
+  "algorithm": "HS256"
+}
+
+Guardar key y secret
+
+{"rsa_public_key":null,"key":"ya8XV660q00jQ2N7TTDE4oodnI09FzRj","tags":null,"created_at":1747987397,"consumer":{"id":"3de545bc-0766-4ab6-96df-8f05bbfe83d3"},"secret":"yr8187QX6wGinK9VEl2bZCWftntYV6O6","id":"8806c322-e3b6-44f6-8ac3-29ebc3c0009c","algorithm":"HS256"}

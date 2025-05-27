@@ -1,0 +1,5 @@
+{
+  "sub": "usuario123",
+  "services": ["actividades", "videos"],
+  "exp": 9999999999
+}

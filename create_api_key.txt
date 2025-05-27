@@ -1,0 +1,30 @@
+1. Crear la entrada en etc/hosts
+
+127.0.0.1 grafana_api_key.marketplace.test
+
+2. Crear servicio en Kong
+
+curl -i -X POST http://localhost:8001/services \
+  --data name=grafana_api_key-service \
+  --data url=http://host.docker.internal:4848
+
+3. Crear la ruta
+
+curl -i -X POST http://localhost:8001/routes \
+  --data service.name=grafana_api_key-service \
+  --data name=grafana_api_key-route \
+  --data hosts[]=grafana_api_key.marketplace.test
+
+4. Activar plugin key-auth en el servicio
+
+curl -i -X POST http://localhost:8001/services/grafana_api_key-service/plugins \
+  --data name=key-auth
+
+5. Crear un consumer para generar una api key
+
+curl -i -X POST http://localhost:8001/consumers \
+  --data username=grafana-consumer
+
+6. Guardar la api key
+
+{"key":"wkTO1mE5DNYu11oLC2g7Gh4igRKOIdvX","ttl":null,"id":"de766bca-edcd-4aa1-9180-31991ee743dd","tags":null,"created_at":1747995118,"consumer":{"id":"d2704c64-0616-4ac4-9f53-c54333bd6ddb"}}

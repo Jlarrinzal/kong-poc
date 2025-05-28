@@ -36,7 +36,10 @@ services:
     restart: on-failure
 
   kong:
-    image: kong:3.9
+    # image: kong:3.9
+    build:
+      context: .
+      dockerfile: Dockerfile.kong
     user: kong
     environment:
       <<: *kong-env

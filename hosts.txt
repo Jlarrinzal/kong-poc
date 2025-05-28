@@ -1,3 +1,6 @@
 127.0.0.1 actividades.marketplace.test
 127.0.0.1 videos.marketplace.test
 127.0.0.1 grafana.marketplace.test
+
+127.0.0.1 grafana-poc.test
+127.0.0.1 local.grafana-poc.test

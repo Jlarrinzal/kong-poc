@@ -20,3 +20,5 @@ done
 echo "✅ Todos los servicios han sido eliminados."
 
 # curl -s http://localhost:8001/services
+
+# curl -s http://localhost:8001/plugins/enabled

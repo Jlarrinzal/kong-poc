@@ -45,18 +45,18 @@ services:
       <<: *kong-env
       KONG_ADMIN_ACCESS_LOG: /dev/stdout
       KONG_ADMIN_ERROR_LOG: /dev/stderr
-      KONG_PROXY_LISTEN: 0.0.0.0:8000
-      KONG_ADMIN_LISTEN: 0.0.0.0:8001
+      KONG_PROXY_LISTEN: 0.0.0.0:8000, 0.0.0.0:8443 ssl
+      KONG_ADMIN_LISTEN: 0.0.0.0:8001, 0.0.0.0:8444 ssl
       KONG_PROXY_ACCESS_LOG: /dev/stdout
       KONG_PROXY_ERROR_LOG: /dev/stderr
       KONG_PREFIX: /var/run/kong
     networks:
       - kong-net
     ports:
-      - "8000:8000"
-      - "8443:8443"
-      - "8001:8001"
-      - "8444:8444"
+      - "9000:8000"
+      - "9443:8443"
+      - "9001:8001"
+      - "9444:8444"
     healthcheck:
       test: [ "CMD", "kong", "health" ]
       interval: 10s
@@ -89,14 +89,14 @@ services:
     volumes:
       - kong_data:/var/lib/postgresql/data
   
-  konga:
-    image: pantsel/konga
-    container_name: konga
-    ports:
-      - "1337:1337"
-    environment:
-      NODE_ENV: production
-    networks:
-      - kong-net
-    depends_on:
-      - kong
+  # konga:
+  #   image: pantsel/konga
+  #   container_name: konga
+  #   ports:
+  #     - "1337:1337"
+  #   environment:
+  #     NODE_ENV: production
+  #   networks:
+  #     - kong-net
+  #   depends_on:
+  #     - kong

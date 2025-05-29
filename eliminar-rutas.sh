@@ -2,7 +2,7 @@
 
 echo "🧹 Eliminando todas las rutas..."
 
-ROUTES=$(curl -s http://localhost:8001/routes)
+ROUTES=$(curl -s http://localhost:9001/routes)
 
 IFS='}' # delimitador para separar por objeto JSON
 for chunk in $ROUTES; do
@@ -11,7 +11,7 @@ for chunk in $ROUTES; do
       ID=$(echo "$chunk" | sed -n 's/.*"id":"\([^"]*\)".*/\1/p')
       if [ -n "$ID" ]; then
         echo "🗑️ Eliminando $ID"
-        curl -s -X DELETE http://localhost:8001/routes/$ID
+        curl -s -X DELETE http://localhost:9001/routes/$ID
       fi
       ;;
   esac
@@ -19,4 +19,4 @@ done
 
 echo "✅ Rutas eliminadas."
 
-# curl -s http://localhost:8001/routes
+# curl -s http://localhost:9001/routes

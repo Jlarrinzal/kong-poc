@@ -53,4 +53,4 @@ curl -i -X POST http://localhost:8001/routes/guardar-token/plugins \
   --data "config.failure_url=https://example.com"
 
 echo "✅ Listo. Visita en tu navegador:"
-echo "➡️ http://local.grafana-poc.test:8000/guardar-token?token=123456"
+echo "➡️ http://local.grafana-poc.test:8000/guardar-token?token=<TU_JWT>"

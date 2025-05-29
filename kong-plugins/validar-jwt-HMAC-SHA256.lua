@@ -1,3 +1,4 @@
+-- No funciona porque no puede utilizar ngx.hmac_sha256
 local secret = "clave-super-secreta"
 
 local function base64url_decode(input)

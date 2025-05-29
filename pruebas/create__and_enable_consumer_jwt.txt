@@ -1,3 +1,5 @@
+Demo para habilitar plugin JWT nativo de Kong
+
 0. Instalar el plugin 
 
 1. Activar el plugin jwt en el servicio actividades

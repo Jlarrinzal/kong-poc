@@ -1,1 +1,1 @@
-local a=kong.request.get_query_arg('token')if a then kong.response.set_header('Set-Cookie','token='..a..'; Domain=grafana-poc; Path=/; HttpOnly')return kong.response.exit(302,'',{['Location']='http://grafana-poc:8000'})end;return
+-- local a=kong.request.get_query_arg('token')if a then kong.response.set_header('Set-Cookie','token='..a..'; Domain=grafana-poc; Path=/; HttpOnly')return kong.response.exit(302,'',{['Location']='http://grafana-poc:8000'})end;return

@@ -47,8 +47,8 @@ curl -s -i -X POST http://localhost:9001/services/launch-jwt-service-${SERVICE_N
 curl -s -i -X POST http://localhost:9001/routes/launch-jwt-${SERVICE_NAME}/plugins \
   --data "name=jwt_validator" \
   --data "config.secret=clave-super-secreta" \
-  --data "config.success_url=https://${DOMAIN_PUBLIC}/dashboards" \
-  --data "config.failure_url=https://${DOMAIN_PUBLIC}/"
+  --data "config.success_url=https://obx-greenguard.aaaida.com/dashboards" \
+  --data "config.failure_url=https://market.upcxels.upc.edu/"
 
 echo "✅ Listo. Puedes probar con:"
 echo "➡️ https://${DOMAIN_LOCAL}/__LAUNCH__?token=<JWT>"

@@ -45,10 +45,10 @@ curl -s -i -X POST http://localhost:9001/services/launch-jwt-service-${SERVICE_N
   --data strip_path=false
 
 curl -s -i -X POST http://localhost:9001/routes/launch-jwt-${SERVICE_NAME}/plugins \
-  --data name=jwt_validator \
-  --data config.secret="clave-super-secreta" \
-  --data config.success_url="https://${DOMAIN_PUBLIC}:${PORT}" \
-  --data config.failure_url="https://${DOMAIN_PUBLIC}:${PORT}/error"
+  --data "name=jwt_validator" \
+  --data "config.secret=clave-super-secreta" \
+  --data "config.success_url=https://${DOMAIN_PUBLIC}:${PORT}/dashboards" \
+  --data "config.failure_url=https://${DOMAIN_PUBLIC}:${PORT}/"
 
 echo "✅ Listo. Puedes probar con:"
 echo "➡️ https://${DOMAIN_LOCAL}:${PORT}/__LAUNCH__?token=<JWT>"

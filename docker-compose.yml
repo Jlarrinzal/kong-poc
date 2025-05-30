@@ -72,6 +72,10 @@ services:
       - ./kong/ssl/key.pem:/etc/kong/ssl-key.pem:ro
     security_opt:
       - no-new-privileges
+    dns_search: .
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
 
   kong-db:
     image: postgres:16

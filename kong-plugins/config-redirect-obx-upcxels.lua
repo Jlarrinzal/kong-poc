@@ -1,1 +1,0 @@
-local a=kong.request.get_query_arg('token')if a=='123456'then kong.response.set_header('Set-Cookie','token='..a..'; Domain=grafana-poc; Path=/; HttpOnly')return kong.response.exit(302,'',{['Location']='https://obx-greenguard.aaaida.com/dashboards'})end;return kong.response.exit(302,'',{['Location']='https://upcxels-pre.widening.eu'})

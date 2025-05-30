@@ -8,7 +8,7 @@ DOMAIN_PUBLIC="${SERVICE_NAME}.proxy.upcxels.upc.edu"
 DOMAIN_LOCAL="local.${SERVICE_NAME}.proxy.upcxels.upc.edu"
 
 # Puerto HTTPS externo
-PORT=9443
+# PORT=9443
 
 echo "🧹 Eliminando configuración previa..."
 
@@ -32,7 +32,7 @@ curl -s -i -X POST http://localhost:9001/services/proxy-service-${SERVICE_NAME}/
   --data "paths[]=/" \
   --data strip_path=false
 
-echo "🛠️ Registrando ruta JWT: https://${DOMAIN_LOCAL}:${PORT}/__LAUNCH__"
+echo "🛠️ Registrando ruta JWT: https://${DOMAIN_LOCAL}/__LAUNCH__"
 
 curl -s -i -X POST http://localhost:9001/services \
   --data name=launch-jwt-service-${SERVICE_NAME} \
@@ -47,9 +47,9 @@ curl -s -i -X POST http://localhost:9001/services/launch-jwt-service-${SERVICE_N
 curl -s -i -X POST http://localhost:9001/routes/launch-jwt-${SERVICE_NAME}/plugins \
   --data "name=jwt_validator" \
   --data "config.secret=clave-super-secreta" \
-  --data "config.success_url=https://${DOMAIN_PUBLIC}:${PORT}/dashboards" \
-  --data "config.failure_url=https://${DOMAIN_PUBLIC}:${PORT}/"
+  --data "config.success_url=https://${DOMAIN_PUBLIC}/dashboards" \
+  --data "config.failure_url=https://${DOMAIN_PUBLIC}/"
 
 echo "✅ Listo. Puedes probar con:"
-echo "➡️ https://${DOMAIN_LOCAL}:${PORT}/__LAUNCH__?token=<JWT>"
-echo "🔁 Si es válido, redirige a: https://${DOMAIN_PUBLIC}:${PORT} (contenido de obx-greenguard)"
+echo "➡️ https://${DOMAIN_LOCAL}/__LAUNCH__?token=<JWT>"
+echo "🔁 Si es válido, redirige a: https://${DOMAIN_PUBLIC} (contenido de obx-greenguard)"

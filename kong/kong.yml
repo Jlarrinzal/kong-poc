@@ -1,16 +1,16 @@
-_format_version: "3.0"
+# _format_version: "3.0"
 
-services:
-  - name: actividades-service
-    url: http://host.docker.internal:5001
-    routes:
-      - name: actividades-route
-        hosts:
-          - actividades.marketplace.test
+# services:
+#   - name: actividades-service
+#     url: http://host.docker.internal:5001
+#     routes:
+#       - name: actividades-route
+#         hosts:
+#           - actividades.marketplace.test
 
-  - name: videos-service
-    url: http://host.docker.internal:5002
-    routes:
-      - name: videos-route
-        hosts:
-          - videos.marketplace.test
+#   - name: videos-service
+#     url: http://host.docker.internal:5002
+#     routes:
+#       - name: videos-route
+#         hosts:
+#           - videos.marketplace.test

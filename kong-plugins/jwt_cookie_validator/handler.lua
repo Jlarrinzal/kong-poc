@@ -28,6 +28,8 @@ function plugin:access(conf)
     })
   end
 
+  kong.log.debug("✅ JWT cookie valid for user: ", jwt_obj.payload.sub)
+  return
 end
 
 return plugin

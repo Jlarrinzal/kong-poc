@@ -28,6 +28,10 @@ function plugin:access(conf)
       ["Location"] = conf.failure_url
     })
   end
+  
+  if jwt_obj.verified then
+  kong.response.set_header("Set-Cookie", "auth_token=" .. token .. "; Path=/; HttpOnly; Secure; SameSite=Lax")
+  end
 
   return kong.response.exit(302, nil, {
     ["Location"] = conf.success_url

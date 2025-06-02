@@ -33,6 +33,12 @@ curl -s -i -X POST http://localhost:9001/services/proxy-service-${SERVICE_NAME}/
   --data "paths[]=/" \
   --data strip_path=false
 
+# Añadimos el plugin jwt_cookie_validator para verificar cookie auth_token
+curl -s -i -X POST http://localhost:9001/routes/proxy-${SERVICE_NAME}/plugins \
+  --data "name=jwt_cookie_validator" \
+  --data "config.secret=clave-super-secreta" \
+  --data "config.failure_url=https://${DOMAIN_LOCAL}/__LAUNCH__"
+
 echo "🛠️ Registrando ruta JWT: https://${DOMAIN_LOCAL}/__LAUNCH__"
 
 # Creamos un servicio dummy que será usado como "trampolín" para lanzar al verdadero si el token JWT es válido

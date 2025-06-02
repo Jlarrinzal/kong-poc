@@ -30,7 +30,7 @@ function plugin:access(conf)
   end
   
   if jwt_obj.verified then
-  kong.response.set_header("Set-Cookie", "auth_token=" .. token .. "; Path=/; HttpOnly; Secure; SameSite=None")
+  kong.response.set_header("Set-Cookie", "auth_token=" .. token .. "; Path=/; HttpOnly; SameSite=None")
   end
 
   return kong.response.exit(302, nil, {

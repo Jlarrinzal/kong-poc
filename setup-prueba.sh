@@ -6,7 +6,7 @@ DOMAIN_1="${SERVICE_NAME_1}.proxy.upcxels.upc.edu"
 UPSTREAM_URL_1="https://obx-greenguard.aaaida.com/dashboards"
 
 # Servicio 2: Market
-SERVICE_NAME_2="market"
+SERVICE_NAME_2="prueba"
 DOMAIN_2="${SERVICE_NAME_2}.upcxels.upc.edu"
 UPSTREAM_URL_2="https://upcxels-pre.widening.eu/"
 
@@ -29,7 +29,7 @@ curl -s -i -X POST http://localhost:9001/services/service-${SERVICE_NAME_1}/rout
   --data name=route-${SERVICE_NAME_1} \
   --data "hosts[]=$DOMAIN_1" \
   --data "paths[]=/" \
-  --data strip_path=false
+  --data strip_path=true
 
 echo "🛠️ Registrando servicio para $DOMAIN_2 → $UPSTREAM_URL_2"
 curl -s -i -X POST http://localhost:9001/services \

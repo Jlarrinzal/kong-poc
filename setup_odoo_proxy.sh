@@ -10,7 +10,7 @@ curl -s -X DELETE http://localhost:9001/services/proxy-service-${SERVICE_NAME}
 echo "🛠️ Registrando servicio local: http://localhost:8000"
 curl -s -i -X POST http://localhost:9001/services \
   --data name=proxy-service-${SERVICE_NAME} \
-  --data url=http://localhost:8000
+  --data url=http://host.docker.internal:8000
 
 echo "🌐 Creando ruta pública en dominio HTTPS ${DOMAIN}"
 curl -s -i -X POST http://localhost:9001/services/proxy-service-${SERVICE_NAME}/routes \

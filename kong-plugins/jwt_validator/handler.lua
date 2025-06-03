@@ -28,9 +28,15 @@ function plugin:access(conf)
       ["Location"] = conf.failure_url
     })
   end
+
+  local domain = conf.domain
   
   if jwt_obj.verified then
-  kong.response.set_header("Set-Cookie", "auth_token=" .. token .. "; Path=/; Domain=.proxy.upcxels.upc.edu; HttpOnly; Secure; SameSite=None")
+    kong.response.set_header("Set-Cookie",
+    "auth_token=" .. token ..
+    "; Path=/; Domain=" .. domain ..
+    "; HttpOnly; Secure; SameSite=None"
+  )
   end
 
   return kong.response.exit(302, nil, {

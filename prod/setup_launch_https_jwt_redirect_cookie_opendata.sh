@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Nombre del subdominio para este servicio (sin .proxy.upcxels.upc.edu)
-SERVICE_NAME="open-data-gg"
+SERVICE_NAME="opendata-gg"
 
 # Dominio público único
 DOMAIN="${SERVICE_NAME}.proxy.upcxels.upc.edu"
@@ -56,7 +56,8 @@ curl -s -i -X POST http://localhost:9001/routes/launch-jwt-${SERVICE_NAME}/plugi
   --data "name=jwt_validator" \
   --data "config.secret=clave-super-secreta" \
   --data "config.success_url=https://${DOMAIN}" \
-  --data "config.failure_url=https://example.com"
+  --data "config.failure_url=https://example.com" \
+  --data "config.domain=${DOMAIN}"
 
 echo "✅ Puedes probar directamente con:"
 echo "➡️ https://${DOMAIN}/__LAUNCH__?token=<JWT>"

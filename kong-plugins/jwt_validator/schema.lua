@@ -10,6 +10,7 @@ return {
           { secret = { type = "string", required = true } },
           { success_url = { type = "string", required = false }, },
           { failure_url = { type = "string", required = false }, },
+          { domain = { type = "string", required = false }, },
         },
     } }
   }

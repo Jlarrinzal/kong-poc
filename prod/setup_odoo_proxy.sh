@@ -2,7 +2,7 @@
 
 SERVICE_NAME="odoo"
 DOMAIN="market.upcxels.upc.edu"
-ODOO_INTERNAL_URL="http://172.20.0.1:8000"
+ODOO_INTERNAL_URL="http://172.17.0.1:8000"
 
 echo "🧹 Eliminando configuración previa (si existe)..."
 curl -s -X DELETE http://localhost:9001/routes/proxy-${SERVICE_NAME}

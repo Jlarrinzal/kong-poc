@@ -22,10 +22,16 @@ curl -s -i -X POST http://localhost:9001/services/proxy-service-${SERVICE_NAME}/
   --data strip_path=false \
   --data https_redirect_status_code=426
 
-# echo "🧩 Añadiendo plugin 'request-transformer' con cabeceras X-Forwarded-*"
-# curl -s -i -X POST http://localhost:9001/services/proxy-service-${SERVICE_NAME}/plugins \
-#   --data name=request-transformer \
-#   --data "config.add.headers=X-Forwarded-Host:https://obx-greenguard.aaaida.com,X-Forwarded-Proto:https" \
-#   --data "tags[]=proxy-${SERVICE_NAME}"
+echo "🧩 Añadiendo plugin 'request-transformer' con cabeceras X-Forwarded-*"
+curl -s -i -X POST http://localhost:9001/services/proxy-service-${SERVICE_NAME}/plugins \
+  --data name=request-transformer \
+  --data "config.add.headers=X-Forwarded-Host:https://obx-greenguard.aaaida.com,X-Forwarded-Proto:https" \
+  --data "tags[]=proxy-${SERVICE_NAME}"
+
+echo "🔁 Añadiendo redirección condicional a /dashboards?kiosk"
+curl -s -i -X POST http://localhost:9001/services/proxy-service-${SERVICE_NAME}/plugins \
+  --data name=pre-function \
+  --data "config.access[1]=if kong.request.get_path() == '/' then kong.response.set_header('Location', '/dashboards?kiosk'); return kong.response.exit(302) end" \
+  --data "tags[]=proxy-${SERVICE_NAME}"
 
 echo "✅ Ya puedes acceder a: https://${DOMAIN}"

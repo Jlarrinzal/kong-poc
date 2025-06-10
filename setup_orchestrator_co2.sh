@@ -2,7 +2,7 @@
 
 SERVICE_NAME="orchestrator_co2"
 DOMAIN="${SERVICE_NAME}.proxy.upcxels.upc.edu"
-INTERNAL_URL="http://10.84.49.23:8001/jupyter"
+INTERNAL_URL="http://10.84.49.23:8001/jupyter/"
 
 echo "🧹 Eliminando configuración previa (si existe)..."
 curl -s -X DELETE http://localhost:9001/routes/proxy-${SERVICE_NAME}

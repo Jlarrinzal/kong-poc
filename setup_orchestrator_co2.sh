@@ -2,7 +2,7 @@
 
 SERVICE_NAME="orchestrator_co2"
 DOMAIN="${SERVICE_NAME}.proxy.upcxels.upc.edu"
-INTERNAL_URL="http://co2.orchestrator.proxy.upcxels.upc.edu/jupyter/"
+INTERNAL_URL="https://co2.orchestrator.proxy.upcxels.upc.edu/jupyter/"
 # INTERNAL_URL="http://10.84.49.23:8001"
 
 echo "🧹 Eliminando configuración previa (si existe)..."

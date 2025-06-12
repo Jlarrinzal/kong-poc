@@ -3,11 +3,13 @@ FROM kong:3.9
 USER root
 
 RUN mkdir -p /usr/local/share/lua/5.1/kong/plugins/jwt_validator \
-    && mkdir -p /usr/local/share/lua/5.1/kong/plugins/jwt_cookie_validator
+    && mkdir -p /usr/local/share/lua/5.1/kong/plugins/jwt_cookie_validator \
+    && mkdir -p /usr/local/share/lua/5.1/kong/plugins/jwt_policy_cookie_validator
 
 COPY kong-plugins/jwt_validator/ /usr/local/share/lua/5.1/kong/plugins/jwt_validator/
 COPY kong-plugins/jwt_cookie_validator/ /usr/local/share/lua/5.1/kong/plugins/jwt_cookie_validator/
+COPY kong-plugins/jwt_policy_cookie_validator/ /usr/local/share/lua/5.1/kong/plugins/jwt_policy_cookie_validator/
 
-ENV KONG_PLUGINS=bundled,jwt_validator,jwt_cookie_validator
+ENV KONG_PLUGINS=bundled,jwt_validator,jwt_cookie_validator,jwt_policy_cookie_validator
 
 USER kong

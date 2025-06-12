@@ -50,8 +50,8 @@ services:
       KONG_PROXY_ACCESS_LOG: /dev/stdout
       KONG_PROXY_ERROR_LOG: /dev/stderr
       KONG_PREFIX: /var/run/kong
-      KONG_SSL_CERT: /etc/kong/ssl-cert.pem
-      KONG_SSL_CERT_KEY: /etc/kong/ssl-key.pem
+      # KONG_SSL_CERT: /etc/kong/ssl-cert.pem
+      # KONG_SSL_CERT_KEY: /etc/kong/ssl-key.pem
     networks:
       - kong-net
     ports:
@@ -68,8 +68,8 @@ services:
     volumes:
       - kong_prefix_vol:/var/run/kong
       - kong_tmp_vol:/tmp
-      - ./kong/ssl/cert.pem:/etc/kong/ssl-cert.pem:ro
-      - ./kong/ssl/key.pem:/etc/kong/ssl-key.pem:ro
+      # - ./kong/ssl/cert.pem:/etc/kong/ssl-cert.pem:ro
+      # - ./kong/ssl/key.pem:/etc/kong/ssl-key.pem:ro
     security_opt:
       - no-new-privileges
     dns_search: .

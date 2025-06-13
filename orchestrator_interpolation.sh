@@ -1,8 +1,8 @@
 #!/bin/bash
 
-SERVICE_NAME="co2_orchestrator"
+SERVICE_NAME="interpolation_orchestrator"
 DOMAIN="${SERVICE_NAME}.proxy.upcxels.upc.edu"
-INTERNAL_URL="https://co2.services.upcxels.upc.edu"
+INTERNAL_URL="https://interpolation.services.upcxels.upc.edu"
 
 echo "🧹 Eliminando configuración previa (si existe)..."
 curl -s -X DELETE http://localhost:9001/routes/proxy-${SERVICE_NAME}

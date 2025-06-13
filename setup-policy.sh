@@ -43,7 +43,7 @@ curl -s -i -X POST http://localhost:9001/services/proxy-service-${SERVICE_NAME}/
   --data "config.required_permissions[1].operator=eq" \
   --data "config.required_permissions[1].rightOperand=EU" \
   --data-urlencode "config.prohibited_targets[1].action=not_show" \
-  --data-urlencode "config.prohibited_targets[1].target=https://obx-gg.proxy.upcxels.upc.edu/alerting" \
+  --data-urlencode "config.prohibited_targets[1].target=https://prueba-obx.proxy.upcxels.upc.edu/alerting" \
   --data "tags[]=proxy-${SERVICE_NAME}"
 
 echo "🔁 Añadiendo redirección condicional a /dashboards?kiosk"

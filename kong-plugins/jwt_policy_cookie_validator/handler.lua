@@ -21,12 +21,16 @@ local function policy_exists(user_policies, required)
 end
 
 -- Verifica que la prohibición exacta exista
-local function prohibition_exists(user_prohibitions, target)
+local function is_request_prohibited(user_prohibitions)
+  local request_path = kong.request.get_path_with_query()
+  local request_url = kong.request.get_scheme() .. "://" .. kong.request.get_host() .. request_path
+
   for _, p in ipairs(user_prohibitions) do
-    if p.action == target.action and p.target == target.target then
+    if p.target == request_url and p.action == "not_show" then
       return true
     end
   end
+
   return false
 end
 
@@ -59,11 +63,19 @@ function plugin:access(conf)
     end
   end
 
-  -- Verificar si existe alguna prohibición que coincida con las bloqueadas
-  if conf.prohibited_targets and type(conf.prohibited_targets) == "table" then
-    for _, prohibited in ipairs(conf.prohibited_targets) do
-      if prohibition_exists(prohibitions, prohibited) then
-        return kong.response.exit(403, { message = "Access denied due to prohibition policy." })
+  -- Verificar si la URL actual está prohibida explícitamente en el JWT
+  if type(prohibitions) == "table" then
+    local request_path = kong.request.get_path()
+    kong.log.debug("📍 Ruta solicitada: ", request_path)
+
+    for _, p in ipairs(prohibitions) do
+      local target_path = p.target:match("^https?://[^/]+(/.*)$") or "/"
+      kong.log.debug("🚫 Comparando con política prohibida: ", target_path)
+
+      if target_path == request_path and p.action == "not_show" then
+        return kong.response.exit(403, {
+          message = "Este recurso está restringido por tu política de acceso."
+        })
       end
     end
   end

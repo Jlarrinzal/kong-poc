@@ -35,13 +35,17 @@ curl -s -i -X POST http://localhost:9001/services/proxy-service-${SERVICE_NAME}/
 
 echo "🧩 Añadiendo plugin 'jwt_policy_cookie_validator' para validar la cookie y políticas"
 curl -s -i -X POST http://localhost:9001/services/proxy-service-${SERVICE_NAME}/plugins \
-  --data name=jwt_policy_cookie_validator \
+  --data name=jwt_policy_cookie_validator1 \
   --data "config.secret=mi_clave_secreta" \
   --data "config.failure_url=https://${DOMAIN}/__LAUNCH__" \
   --data "config.required_permissions[1].action=READ" \
   --data "config.required_permissions[1].leftOperand=location" \
   --data "config.required_permissions[1].operator=eq" \
   --data "config.required_permissions[1].rightOperand=EU" \
+  --data "config.required_permissions[2].action=READ" \
+  --data "config.required_permissions[2].leftOperand=location" \
+  --data "config.required_permissions[2].operator=eq" \
+  --data "config.required_permissions[2].rightOperand=ESP" \
   --data-urlencode "config.prohibited_targets[1].action=not_show" \
   --data-urlencode "config.prohibited_targets[1].target=https://prueba-obx.proxy.upcxels.upc.edu/alerting" \
   --data "tags[]=proxy-${SERVICE_NAME}"

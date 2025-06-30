@@ -1,87 +1,91 @@
 local jwt_decoder = require "resty.jwt"
+local http = require "resty.http"
+local cjson = require "cjson"
 local kong = kong
 
 local plugin = {
   PRIORITY = 1001,
-  VERSION = "1.3.0"
+  VERSION = "1.0.0"
 }
 
--- Verifica que la política requerida exista exactamente en el JWT
-local function policy_exists(user_policies, required)
-  for _, policy in ipairs(user_policies) do
-    if policy.action == required.action
-      and policy.leftOperand == required.leftOperand
-      and policy.operator == required.operator
-      and policy.rightOperand == required.rightOperand
-    then
-      return true
-    end
-  end
-  return false
-end
-
--- Verifica que la prohibición exacta exista
-local function is_request_prohibited(user_prohibitions)
-  local request_path = kong.request.get_path_with_query()
-  local request_url = kong.request.get_scheme() .. "://" .. kong.request.get_host() .. request_path
-
-  for _, p in ipairs(user_prohibitions) do
-    if p.target == request_url and p.action == "not_show" then
-      return true
-    end
-  end
-
-  return false
-end
-
 function plugin:access(conf)
+  kong.log.err("🧪 Entrando en jwt_policy_cookie_validator plugin")
   local cookie_header = kong.request.get_header("cookie")
   if not cookie_header then
-    return kong.response.exit(302, nil, { ["Location"] = conf.failure_url })
+    return kong.response.exit(302, nil, {
+      ["Location"] = conf.failure_url
+    })
   end
 
   local token = string.match(cookie_header, "auth_token=([^;]+)")
   if not token then
-    return kong.response.exit(302, nil, { ["Location"] = conf.failure_url })
+    return kong.response.exit(302, nil, {
+      ["Location"] = conf.failure_url
+    })
   end
 
   local jwt_obj = jwt_decoder:verify(conf.secret, token)
   if not jwt_obj.verified or (jwt_obj.payload.exp and tonumber(jwt_obj.payload.exp) < os.time()) then
-    return kong.response.exit(302, nil, { ["Location"] = conf.failure_url })
+    return kong.response.exit(302, nil, {
+      ["Location"] = conf.failure_url
+    })
   end
 
-  local policies = jwt_obj.payload.policies or {}
-  local permissions = policies.permission or {}
-  local prohibitions = policies.prohibition or {}
+  kong.log.debug("✅ JWT cookie valid for user: ", jwt_obj.payload.sub)
 
-  -- Validar que existan todas las policies requeridas literalmente
-  if conf.required_permissions and type(conf.required_permissions) == "table" then
-    for _, required in ipairs(conf.required_permissions) do
-      if not policy_exists(permissions, required) then
-        return kong.response.exit(403, { message = "Missing required permission policy." })
-      end
-    end
+  -- 🔒 Validación de IP externa
+  local client_ip = kong.client.get_ip()
+  local domain = kong.request.get_host()
+
+  local httpc = http.new()
+
+  -- 1️⃣ Validación de IP
+  local res_ip, err_ip = httpc:request_uri("http://192.168.1.41:5005/validate-ip", {
+    method = "POST",
+    body = cjson.encode({
+      ip = client_ip,
+      domain = domain
+    }),
+    headers = {
+      ["Content-Type"] = "application/json"
+    }
+  })
+
+  if not res_ip then
+    kong.log.err("Error contacting validate-ip: ", err_ip)
+    return kong.response.exit(500, "Error validating IP")
   end
 
-  -- Verificar si la URL actual está prohibida explícitamente en el JWT
-  if type(prohibitions) == "table" then
-    local request_path = kong.request.get_path()
-    kong.log.debug("📍 Ruta solicitada: ", request_path)
-
-    for _, p in ipairs(prohibitions) do
-      local target_path = p.target:match("^https?://[^/]+(/.*)$") or "/"
-      kong.log.debug("🚫 Comparando con política prohibida: ", target_path)
-
-      if target_path == request_path and p.action == "not_show" then
-        return kong.response.exit(403, {
-          message = "Este recurso está restringido por tu política de acceso."
-        })
-      end
-    end
+  local body_ip = cjson.decode(res_ip.body)
+  if not body_ip.allowed then
+    kong.log.warn("🚫 IP ", client_ip, " no permitida para el dominio ", domain)
+    return kong.response.exit(403, "Access denied: your IP is not allowed")
   end
 
-  kong.log.debug("✅ JWT contiene todas las políticas requeridas para: ", jwt_obj.payload.sub)
-  return
+  -- 2️⃣ Validación de límite de peticiones
+  local res_req, err_req = httpc:request_uri("http://192.168.1.41:5005/validate-request", {
+    method = "POST",
+    body = cjson.encode({
+      ip = client_ip,
+      domain = domain
+    }),
+    headers = {
+      ["Content-Type"] = "application/json"
+    }
+  })
+
+  if not res_req then
+    kong.log.err("Error contacting validate-request: ", err_req)
+    return kong.response.exit(500, "Error validating request limit")
+  end
+
+  local body_req = cjson.decode(res_req.body)
+  if not body_req.allowed then
+    kong.log.warn("🚫 Peticiones agotadas para ", client_ip, " en ", domain)
+    return kong.response.exit(429, "Request limit exceeded")
+  end
+
+  kong.log.debug("✅ IP permitida y request contabilizada correctamente")
 end
 
 return plugin
